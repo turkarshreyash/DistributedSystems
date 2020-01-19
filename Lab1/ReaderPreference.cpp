@@ -6,7 +6,7 @@
 
 
 
-int variable, reader_count;
+int variable, reader_count  = 0;
 sem_t critical_access;
 sem_t reader_count_access;
 
