@@ -119,5 +119,8 @@ int main(){
     }
 
     sem_destroy(&critical_access); 
-    sem_destroy(&reader_count_access); 
+    sem_destroy(&reader_count_access);
+    sem_destroy(&writer_count_access); 
+    sem_destroy(&early_bird_access); 
+
 }
