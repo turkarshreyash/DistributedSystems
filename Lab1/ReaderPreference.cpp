@@ -4,8 +4,6 @@
 #include <unistd.h>
 #include <fstream> 
 
-
-
 int variable = 0, reader_count  = 0;
 sem_t critical_access;
 sem_t reader_count_access;
@@ -35,7 +33,7 @@ void* Reader(void *args){
     while(getline(fin, line)){
         // Read a Line from File 
         // Print line in Console 
-        std::cout << line << std::endl; 
+        std::cout <<"Reader : "<< line << std::endl; 
     } 
   
     // Close the file 
@@ -69,7 +67,7 @@ void* Writer(void* args){
     fout.open("readerWriter.txt",std::ios::trunc);
     
     fout << "Variable : " << variable << "\n"; 
-  
+    std::cout<<"Writer"<<std::endl;
     // Close the File 
     fout.close();
 

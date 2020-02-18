@@ -1,5 +1,5 @@
 #include <iostream> 
-#include<pthread.h> 
+#include <pthread.h> 
 #include<semaphore.h> 
 #include <unistd.h>
 #include <fstream> 
@@ -40,7 +40,7 @@ void* Reader(void *args){
     while(getline(fin, line)){
         // Read a Line from File 
         // Print line in Console 
-        std::cout << line << std::endl; 
+        std::cout <<"Reader : "<< line << std::endl;  
     } 
   
     // Close the file 
@@ -79,6 +79,7 @@ void* Writer(void* args){
     std::ofstream fout;
     fout.open("readerWriter2.txt",std::ios::trunc);
     fout << "Variable : " << variable << "\n";
+    std::cout<<"Writer"<<std::endl;
     // Close the File 
     fout.close();
     sem_post(&critical_access);
