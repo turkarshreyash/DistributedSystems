@@ -1,0 +1,4 @@
+*.json
+*.h.gch
+*.out
+test.*
