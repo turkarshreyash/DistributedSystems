@@ -16,12 +16,13 @@ Virtual Physical Layer Working on UDP.
 #include<inttypes.h>
 #include<cstring>
 
+#define MAX_MESSAGE_LEN 1024
+
 #include"sliding_window_stack.h"
 #include"frame.h"
 #include"user_interface.h"
 
 
-#define MAX_MESSAGE_LEN 1024
 
 //Network Layer
 int sockfd; 
@@ -33,7 +34,6 @@ struct connection *conn;
 
 
 void startNetworkLayer(uint16_t ws, uint16_t port){
-
     //Imported From GFG
     if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
         perror("socket creation failed"); 
@@ -55,7 +55,7 @@ void startNetworkLayer(uint16_t ws, uint16_t port){
     conn = NULL;
 
     //Receiver Thread 1
-    //Ack Thread 2
+    //ack_timer_handler Thread 2len
     //****TO-DO*****************************************
 
 
@@ -63,6 +63,8 @@ void startNetworkLayer(uint16_t ws, uint16_t port){
     
 }
 
+
+//Receiver polling function
 void receiver(){
     uint len;
     uint16_t n;
@@ -73,7 +75,8 @@ void receiver(){
         n = recvfrom(sockfd, buffer, MAX_MESSAGE_LEN, 0, (struct sockaddr*)&cliaddr,&len);
 
         //if message length is less than 8B reject packet
-        //Because Header is itself 8B long
+        //Because Header is itself 8#include"frame.h"
+#include"network_layer.h"B long
         if(n < 8){
             sendto(sockfd, "ERROR", 5, 0,(struct sockaddr*)&cliaddr,len);
             continue;
@@ -116,37 +119,25 @@ void receiver(){
                         DISPLAY(FILE_TRANSFER_FAILED);
                         //To-Do => Delete the file
                          //****TO-DO*****************************************
-
-
                         //Exit 
                         exit(0);
                     }
                 }else if(received.frame_type == DATA){
-                    //To-Do List
-                     //****TO-DO*****************************************
-
+                    //Handle Data
+                    data_handler(&received);
 
                 }else if(received.frame_type == ACK){
-                    //To-Do List
-                     //****TO-DO*****************************************
-
-                    
+                    //Handle ACKs
+                    ack_handler(&received);
                 }
-
-                
             }else{
                 sendto(sockfd, "BUSY", 5, 0,(struct sockaddr*)&cliaddr,len);
             }
-
-
-
-
-
-
-
-
         }
-
-
     }
 } 
+
+//Calling sending function
+void send_to_conn(char *message){
+    sendto(sockfd, message, MAX_MESSAGE_LEN, 0, (struct sockaddr*)&conn->remote_addr, sizeof(conn->remote_addr));
+}
