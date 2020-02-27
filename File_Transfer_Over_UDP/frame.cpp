@@ -86,32 +86,44 @@ char* get_data(struct packet *input){
 }
 
 uint16_t get_checksum(packet *input){
+    
     uint16_t checksum = 0;
-    //frame type added
+
+    //frame type addition
     checksum += ((uint16_t)input->frame_type);
-
-    //lower bits of seq number added
-    checksum += ((uint16_t)input->seq_number);
-    //higher bits of seq number added
+    //if carry then add
+    checksum = (checksum + (checksum >> 8)) & 0xff;
+    //seq number low addition
+    checksum += ((uint16_t)input->seq_number & 0xff);
+    //if carry then add
+    checksum = (checksum + (checksum >> 8)) & 0xff;
+    //seq number high addition
     checksum += ((uint16_t)(input->seq_number>>8));
-
-    //i_code type added
+    //if carry then add
+    checksum = (checksum + (checksum >> 8)) & 0xff;
+    //i_code addition
     checksum += ((uint16_t)input->i_code);
-
-    //lower bits of data_len added
-    checksum += ((uint16_t)input->data_len);
-    //higher bits of data_len added
+    //if carry then add
+    checksum = (checksum + (checksum >> 8)) & 0xff;
+    //data _len low addition
+    checksum += ((uint16_t)input->data_len & 0xff);
+    //if carry then add
+    checksum = (checksum + (checksum >> 8)) & 0xff;
+    //data _len high addition
     checksum += ((uint16_t)(input->data_len>>8));
+    //if carry then add
+    checksum = (checksum + (checksum >> 8)) & 0xff;
 
     uint16_t i = 0;
     while(i < input->data_len){
+        //data addition
         checksum += ((uint16_t)input->data[i]);
+        //if carry then add
+        checksum = (checksum + (checksum >> 8)) & 0xff;
         i++;
     }
 
-
-    return 0xffff - checksum;
-
+    return 0xff - checksum;
 }
 
 bool checksum_check(packet *input){
