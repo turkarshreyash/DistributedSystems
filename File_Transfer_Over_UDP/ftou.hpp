@@ -11,7 +11,7 @@ Shreyash H. Turkar
 #include"udp.hpp"
 #include"queue.hpp"
 
-// #define DEBUG_MODE
+#define DEBUG_MODE
 
 #ifdef DEBUG_MODE
 #define DEBUG(A) std::cout<<A;
