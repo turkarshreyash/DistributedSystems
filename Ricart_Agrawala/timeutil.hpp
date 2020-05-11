@@ -9,6 +9,7 @@ Time utilities
 #pragma once
 
 #include<sys/time.h>
+#include<unistd.h>
 #include<inttypes.h>
 
 //returns timestamp in milli

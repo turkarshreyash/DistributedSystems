@@ -162,7 +162,7 @@ void request_access_critical_section(uint64_t sec){
                     send_data(Ri[i],req_message,MESSAGE_SIZE);
                     retry = 1;
                 }
-                delay(0,500);
+                delay(retry,500);
                 retry++;
             }
         }
@@ -185,6 +185,8 @@ void request_access_critical_section(uint64_t sec){
             send_data(reply_fd,reply_messsage,MESSAGE_SIZE);
         }
         std::cout<<"Success: Replied to all Ni in LocalQ\n";
+        delete(reply_messsage);
+        delete(req_message);
     }
 }
 
@@ -232,6 +234,7 @@ void NiHandler(uint16_t re){
                 delay(0,100);
                 send_data(Ri[re],reply_message,MESSAGE_SIZE);
                 std::cout<<"Success: Replyed to "<<re<<"\n";
+                delete(reply_message);
             }else if(interested_cs && !access_granted){
                 recv_seconds = get_timestamp_seconds(received_message);
                 recv_useconds = get_timestamp_useconds(received_message);
@@ -242,6 +245,7 @@ void NiHandler(uint16_t re){
                     reply_message = create_reply_message(server_fd);
                     send_data(Ri[re],reply_message,MESSAGE_SIZE);
                     std::cout<<"Success: Replyed to "<<re<<"\n";
+                    delete(reply_message);
                 }else{
                     localQ->insert(received_message);
                     std::cout<<"Info: Requested by "<<re<<" deffered added to localQ\n";

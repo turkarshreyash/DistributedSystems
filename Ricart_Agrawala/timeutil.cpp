@@ -13,8 +13,7 @@ uint64_t seconds(){
 }
 
 void delay(uint64_t s, uint64_t us){
-   struct timeval temp;
-   struct timeval t;
+    struct timeval t;
     t.tv_sec = s;
     t.tv_usec = us;
     select(0, 0, 0, 0, &t);
